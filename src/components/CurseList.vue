@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, ref } from "vue";
+import { defineComponent, PropType, reactive, ref, watchEffect } from "vue";
 
 export default defineComponent({
   name: "CurseList",
@@ -57,6 +57,16 @@ export default defineComponent({
       selectableCurses.forEach((curse) => (curse.selected = selectAll.value));
       selectionChanged();
     }
+    watchEffect(() => {
+      selectableCurses.splice(0);
+      const scs =
+        props?.curses
+          ?.sort((left, right) =>
+            left.toLowerCase() < right.toLowerCase() ? -1 : 1
+          )
+          .map((curse) => ({ curse, selected: false })) ?? [];
+      scs.forEach((scs) => selectableCurses.push(scs));
+    });
     return {
       selectableCurses,
       selectAll,

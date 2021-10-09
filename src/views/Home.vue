@@ -54,7 +54,13 @@ export default defineComponent({
     const calendarUrl = new URL(baseUrl + "/calendar");
     const eventNameUrl = new URL(baseUrl + "/eventCategories");
     let urlString = calendarUrl.toString();
-    let curseCategories: any[] = new Array(0);
+    // let curseCategories: any[] = new Array(0);
+    let curseCategories: any[] = [
+      { name: "1. Lehrjahr", curses: [] },
+      { name: "2. Lehrjahr", curses: [] },
+      { name: "3. Lehrjahr", curses: [] },
+      { name: "Wahlpflicht", curses: [] },
+    ];
     const selectedCurses: string[][] = [];
     const state = reactive({
       curseCategories,
@@ -79,9 +85,9 @@ export default defineComponent({
     }
     async function loadSemester() {
       generateLink();
-      state.curseCategories.splice(0, state.curseCategories.length);
       const resp = await fetch(eventNameUrl.toString());
       const respCurseCategories: any[] = await resp.json();
+      state.curseCategories.splice(0, state.curseCategories.length);
       respCurseCategories.forEach((categorie) =>
         state.curseCategories.push(categorie)
       );
