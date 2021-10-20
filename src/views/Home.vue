@@ -28,11 +28,20 @@
         />
       </div>
     </div>
-    <div class="ui disabled action input" style="width: 100%">
+    <div
+      class="ui disabled action input"
+      v-bind:class="{ 'animate__animated animate__pulse': state.copied }"
+      style="width: 100%"
+    >
       <input type="text" v-model="state.urlString" />
       <button class="ui labeled icon button">
-        <i class="clipboard icon"></i>
-        Copy Link
+        <i
+          v-bind:class="{
+            'checkmark icon': state.copied,
+            'clipboard icon': !state.copied,
+          }"
+        ></i>
+        {{ state.copied ? "Copied" : "Copy Link" }}
       </button>
     </div>
   </form>
@@ -41,6 +50,7 @@
 <script lang="ts">
 import { defineComponent, proxyRefs, reactive, ref } from "vue";
 import CurseList from "../components/CurseList.vue";
+import "animate.css";
 
 export default defineComponent({
   name: "Home",
@@ -54,6 +64,7 @@ export default defineComponent({
     const calendarUrl = new URL(baseUrl + "/calendar");
     const eventNameUrl = new URL(baseUrl + "/eventCategories");
     let urlString = calendarUrl.toString();
+    let copied = false;
     // let curseCategories: any[] = new Array(0);
     let curseCategories: any[] = [
       { name: "1. Lehrjahr", curses: [] },
@@ -67,6 +78,7 @@ export default defineComponent({
       year,
       winterSemester,
       urlString,
+      copied,
     });
     function generateLink() {
       eventNameUrl.searchParams.set(
@@ -98,6 +110,10 @@ export default defineComponent({
     }
     function copyToClipboard() {
       navigator.clipboard.writeText(state.urlString);
+      if (!state.copied) {
+        state.copied = true;
+        setTimeout(() => (state.copied = false), 2500);
+      }
     }
     loadSemester();
     return {
