@@ -1,22 +1,28 @@
 <template>
-  <div class="ui medium header">{{ listTitle }}</div>
-  <div class="ui slider checkbox">
-    <input
-      type="checkbox"
-      v-model="selectAll"
-      @change="changeGlobalSelection"
-    />
-    <label>{{ "Select All" }}</label>
+  <div class="ui placeholder" v-if="isLoading">
+    <div class="header"></div>
+    <div v-for="index in 10" :key="index" class="line"></div>
   </div>
-  <div class="ui divider"></div>
-  <div v-for="selectableCurse in selectableCurses" :key="selectableCurse.curse">
+  <div v-else>
+    <div class="ui medium header">{{ listTitle }}</div>
     <div class="ui slider checkbox">
       <input
         type="checkbox"
-        v-model="selectableCurse.selected"
-        @change="selectionChanged"
+        v-model="selectAll"
+        @change="changeGlobalSelection"
       />
-      <label>{{ selectableCurse.curse }}</label>
+      <label>{{ "Select All" }}</label>
+    </div>
+    <div class="ui divider"></div>
+    <div v-for="selectableCurse in selectableCurses" :key="selectableCurse.curse">
+      <div class="ui slider checkbox">
+        <input
+          type="checkbox"
+          v-model="selectableCurse.selected"
+          @change="selectionChanged"
+        />
+        <label>{{ selectableCurse.curse }}</label>
+      </div>
     </div>
   </div>
   <br />
@@ -36,6 +42,10 @@ export default defineComponent({
       type: Array as PropType<Array<string>>,
       requiered: true,
     },
+    isLoading: {
+      type: Boolean,
+      required: true,
+    }
   },
   emits: ["selectionChanged"],
   setup(props, context) {

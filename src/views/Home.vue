@@ -24,6 +24,7 @@
         <CurseList
           :listTitle="curseCategorie.name"
           :curses="curseCategorie.curses"
+          :isLoading="state.isLoading"
           @selectionChanged="updateSelectedCurses($event, index)"
         />
       </div>
@@ -65,7 +66,8 @@ export default defineComponent({
     const eventNameUrl = new URL(baseUrl + "/eventCategories");
     let urlString = calendarUrl.toString();
     let copied = false;
-    // let curseCategories: any[] = new Array(0);
+    let isLoading = false;
+
     let curseCategories: any[] = [
       { name: "1. Lehrjahr", curses: [] },
       { name: "2. Lehrjahr", curses: [] },
@@ -79,6 +81,7 @@ export default defineComponent({
       winterSemester,
       urlString,
       copied,
+      isLoading,
     });
     function generateLink() {
       eventNameUrl.searchParams.set(
@@ -104,6 +107,7 @@ export default defineComponent({
       respCurseCategories.forEach((categorie) =>
         state.curseCategories.push(categorie)
       );
+      state.isLoading = false;
     }
     function updateSelectedCurses(data: string[], index: number) {
       selectedCurses[index] = data;
