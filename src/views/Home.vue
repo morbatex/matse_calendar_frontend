@@ -96,6 +96,7 @@ export default defineComponent({
       state.urlString = calendarUrl.toString();
     }
     async function loadSemester() {
+      selectedCurses.splice(0);
       generateLink();
       const resp = await fetch(eventNameUrl.toString());
       const respCurseCategories: any[] = await resp.json();
