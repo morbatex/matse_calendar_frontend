@@ -18,7 +18,7 @@ jobs:
 
       - name: read version
         id: read_version
-        uses: Saionaro/extract-package-version@v1.2.1
+        uses: Saionaro/extract-package-version@v1.3.0
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
